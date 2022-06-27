@@ -56,8 +56,13 @@ app.use((error, req, res, next) => {
 mongoose
 .connect('mongodb+srv://newUser:gakSEVoyZzYMzTGH@cluster0.bioyf.mongodb.net/messages?retryWrites=true&w=majority')
 .then(result => {
-    app.listen(8080)
+    const server = app.listen(8080)
+    const io = require('./socket').init(server)
+    io.on('connection', socket => {
+        console.log('client connected')
+    })
 })
+.then(log => {console.log('connected to mongoose')} )
 .catch(err => {
     console.log(err)
 })
